@@ -178,5 +178,7 @@ Matrix3D MakeRotationY(float t);
 
 Matrix3D MakeRotationZ(float t);
 
+Matrix3D MakeRotation(float t, const Vector3D& a);
+
 
 #endif //HWADS_MATH_H

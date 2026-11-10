@@ -375,3 +375,20 @@ Matrix3D MakeRotationZ(float t) {
                      s,    c,    0.0F,
                      0.0F, 0.0F, 1.0F));
 }
+
+Matrix3D MakeRotation(float t, const Vector3D& a) {
+    float c = cos(t);
+    float s = sin(t);
+    float d = 1.0F - c;
+
+    float x = a.x * d;
+    float y = a.y * d;
+    float z = a.z * d;
+    float axay = x * a.y;
+    float axaz = x * a.z;
+    float ayaz = y * a.z;
+
+    return (Matrix3D(c + x * a.x, axay - s * a.z, axaz + s * a.y,
+                     axay + s * a.z, c + y * a.y, ayaz - s * a.x,
+                     axaz - s * a.y, ayaz + s * a.x, c + z * a.z));
+}
