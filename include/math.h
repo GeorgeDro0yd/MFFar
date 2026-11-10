@@ -172,6 +172,11 @@ float Determinant(const Matrix4D& M);
 
 Matrix4D Inverse(const Matrix4D& M);
 
+Matrix3D MakeRotationX(float t);
+
+Matrix3D MakeRotationY(float t);
+
+Matrix3D MakeRotationZ(float t);
 
 
 #endif //HWADS_MATH_H

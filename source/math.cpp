@@ -348,3 +348,30 @@ Matrix4D Inverse(const Matrix4D& M) {
                      r2.x, r2.y, r2.z, -Dot(d, s),
                      r3.x, r3.y, r3.z,  Dot(c, s)));
 }
+
+Matrix3D MakeRotationX(float t) {
+    float c = cos(t);
+    float s = sin(t);
+
+    return (Matrix3D(1.0F, 0.0F, 0.0F,
+                     0.0F, c,    -s,
+                     0.0F, s,    c   ));
+}
+
+Matrix3D MakeRotationY(float t) {
+    float c = cos(t);
+    float s = sin(t);
+
+    return (Matrix3D(c,    0.0F, s,
+                     0.0F, 1.0F, 0.0F,
+                     -s,   0.0F, c   ));
+}
+
+Matrix3D MakeRotationZ(float t) {
+    float c = cos(t);
+    float s = sin(t);
+
+    return (Matrix3D(c,    -s,   0.0F,
+                     s,    c,    0.0F,
+                     0.0F, 0.0F, 1.0F));
+}
