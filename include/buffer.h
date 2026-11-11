@@ -18,37 +18,52 @@ public:
 
     }
 
-    std::vector<char> pixels = std::vector<char>(height * width  , 'a');
-    std::vector<float> depth= std::vector<float>(height * width, 0.1);
+    std::vector<char> pixels = std::vector<char>(height * width  , ' ');
+    std::vector<float> depth= std::vector<float>(height * width, std::numeric_limits<float>::infinity());
 private:
 
 };
 
-void Rasterize(Vector3D& a, Vector3D& b, Vector3D& c, char d = '#') {
+void Rasterize(const Vector3D& a, const Vector3D& b, const Vector3D& c, Buffer& buffer, char d = '#') {
+    const int w = buffer.width, h = buffer.height;
+
     int x1 = std::floor(std::min(a.x, std::min(b.x, c.x)));
     int x2 = std::ceil (std::max(a.x, std::max(b.x, c.x)));
     int y1 = std::floor(std::min(a.y, std::min(b.y, c.y)));
     int y2 = std::ceil (std::max(a.y, std::max(b.y, c.y)));
 
-    if (x2 < 0 || x1 >= w || y2 < 0 || y1 >= h) {
-        // TO DO LOGGER
-        return;
-    }
+    x1 = std::max(x1, 0);      x2 = std::min(x2, w - 1);
+    y1 = std::max(y1, 0);      y2 = std::min(y2, h - 1);
+
+    Vector3D n = Cross(b - a, c - a);
+    if (n.z == 0) return;   // triangle is edge-on
+
     auto edge = [](const Vector3D& a, const Vector3D& b, float x, float y) -> float {
         return (b.x - a.x) * (y - a.y) - (b.y - a.y) * (x - a.x);
     };
+
+    auto depthAt = [&](float x, float y) -> float {   // use the plane equation to find z
+        return a.z - (n.x * (x - a.x) + n.y * (y - a.y)) / n.z;
+    };
+
     for (int y = y1; y <= y2; y++) {
         for (int x = x1; x <= x2; x++) {
-            float e0 = edge(a, b, x + 0.5f, y + 0.5f);
-            float e1 = edge(b, c, x + 0.5f, y + 0.5f);
-            float e2 = edge(c, a, x + 0.5f, y + 0.5f);
+            float px = x + 0.5f, py = y + 0.5f;
+
+            float e0 = edge(a, b, px, py);
+            float e1 = edge(b, c, px, py);
+            float e2 = edge(c, a, px, py);
 
             if ((e0 >= 0 && e1 >= 0 && e2 >= 0) || (e0 <= 0 && e1 <= 0 && e2 <= 0)) {
-
+                float z = depthAt(px, py);
+                int i = y * w + x;
+                if (z > 0 && z < buffer.depth[i]) {
+                    buffer.pixels[i] = d;
+                    buffer.depth[i] = z;
+                }
             }
         }
     }
-
 }
 
 
