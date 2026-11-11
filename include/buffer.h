@@ -13,7 +13,7 @@ const int w = 110,h = 30;
 class Scene {
     public:
 
-    std::vector<Object> objects_;
+    std::vector<Object> objects_ = {Object()};
     void update(float t, float dt) {
 
 
@@ -83,8 +83,27 @@ inline void Rasterize(const Vector3D& a, const Vector3D& b, const Vector3D& c, B
         }
     }
 }
-inline void drawPov(const Scene& scene, Buffer& buffer) {
 
+
+inline Vector4D toVector4D(const Vector3D& a) {
+    return Vector4D(a.x, a.y, a.z, 1.0);
+}
+
+inline void drawPov(const Scene& scene, Buffer& buffer) {
+    for (auto& x : scene.objects_) {
+        for (int i = 0; i<x.mesh->indices.size()/3; i++) {
+            auto Global = MakeTransform(x);
+            auto a = Global * toVector4D(x.mesh->vertices[3 * i]);
+            auto b = Global * toVector4D(x.mesh->vertices[3 * i + 1]);
+            auto c = Global * toVector4D(x.mesh->vertices[3 * i + 2]);
+            auto d = x.mesh->color[i];
+            //NOW PROJECT TO CAMERA; camera is basically a rectangle which center is located on (0,0,0) as first version
+
+
+        }
+
+    }
+    
 };
 
 

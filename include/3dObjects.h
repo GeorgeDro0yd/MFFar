@@ -11,9 +11,11 @@
 struct Mesh {
     std::vector<Vector3D> vertices;
     std::vector<int> indices;
-    Mesh(std::vector<Vector3D> vertices, std::vector<int> indices) {
+    std::vector<char> color;
+    Mesh(std::vector<Vector3D> vertices, std::vector<int> indices, std::vector<char> color) {
         this->vertices = std::move(vertices);
         this->indices = std::move(indices);
+        this->color = std::move(color);
     }
 };
 
@@ -40,6 +42,19 @@ const Mesh Cube(
         0, 4, 7,   0, 7, 3,   // x = -h
         3, 7, 6,   3, 6, 2,   // y = +h
         0, 1, 5,   0, 5, 4    // y = -h
+    },
+    {
+        '^', '^',
+        '#', '#',
+        '%', '%',
+        'A', 'A',
+        '-', '-',
+        ':',':',
+        'f','f',
+        '?','?'
+
+
+
     }
 );
 
@@ -47,10 +62,11 @@ const Mesh Cube(
 
 struct Object {
     const Mesh*    mesh;
+
     Vector3D position;
     float    angle;
-    explicit Object(const Mesh* mesh = &Cube, Vector3D position = {0,0,len}, float angle = 0) :
-    mesh(mesh), position(position), angle(angle) {
+    explicit Object(const Mesh* mesh = &Cube, Vector3D position = {0,0,len + 10}, float angle = 0) :
+    mesh(mesh), position(position), angle(angle)  {
 
     }
 };
