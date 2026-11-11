@@ -46,9 +46,13 @@ const Mesh Cube(
 
 
 struct Object {
-    Mesh*    mesh;
+    const Mesh*    mesh;
     Vector3D position;
     float    angle;
+    explicit Object(const Mesh* mesh = &Cube, Vector3D position = {0,0,len}, float angle = 0) :
+    mesh(mesh), position(position), angle(angle) {
+
+    }
 };
 
 

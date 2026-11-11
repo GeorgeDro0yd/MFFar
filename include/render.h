@@ -8,9 +8,11 @@
 #include <iostream>
 struct Screen {
     Buffer buffer;
+    Scene scene;
     void update(float t, float dt) {
-        buffer.update(t, dt);
-
+        scene.update(t, dt);
+        buffer.clear();
+        drawPov(scene, buffer);
         std::string frame = "\x1b[H";
         for (int i = 0; i < buffer.height; i++) {
             for (int j = 0; j < buffer.width; j++) {
@@ -20,6 +22,7 @@ struct Screen {
         }
         std::cout << frame << std::flush;
     }
+
 };
 
 

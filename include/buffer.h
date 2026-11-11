@@ -10,21 +10,39 @@
 
 const int w = 110,h = 30;
 
+class Scene {
+    public:
+
+    std::vector<Object> objects_;
+    void update(float t, float dt) {
+
+
+
+    }
+
+};
+
+
 
 class Buffer {
 public:
     int width = w, height = h;
-    void update(float t, float dt) {
 
+    void clear() {
+        for (auto& x : pixels) {
+            x = ' ';
+        }
+        for (auto& y : depth) {
+            y = std::numeric_limits<float>::infinity();
+        }
     }
-
     std::vector<char> pixels = std::vector<char>(height * width  , ' ');
     std::vector<float> depth= std::vector<float>(height * width, std::numeric_limits<float>::infinity());
 private:
 
 };
 
-void Rasterize(const Vector3D& a, const Vector3D& b, const Vector3D& c, Buffer& buffer, char d = '#') {
+inline void Rasterize(const Vector3D& a, const Vector3D& b, const Vector3D& c, Buffer& buffer, char d = '#') {
     const int w = buffer.width, h = buffer.height;
 
     int x1 = std::floor(std::min(a.x, std::min(b.x, c.x)));
@@ -65,6 +83,9 @@ void Rasterize(const Vector3D& a, const Vector3D& b, const Vector3D& c, Buffer& 
         }
     }
 }
+inline void drawPov(const Scene& scene, Buffer& buffer) {
+
+};
 
 
 #endif //HWADS_BUFFER_H
