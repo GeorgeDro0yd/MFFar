@@ -7,19 +7,26 @@
 #include <chrono>
 #include <thread>
 
+
 auto fps = 120.0;
 
 int main() {
-    bool running = true;
+    using clock = std::chrono::steady_clock;
+    const float targetFps = 60.0f;
 
     Screen screen;
-    auto t = 0.0;
+    float t = 0.0f;
+    auto prev = clock::now();
 
-    while (running) {
-        screen.update(t,2);
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000/60));
-        t+= 1/fps;
+    while (true) {
+        auto now = clock::now();
+        float dt = std::chrono::duration<float>(now - prev).count(); // секунды
+        prev = now;
+        if (dt > 0.1f) dt = 0.1f; // чтобы лаг не давал огромный шаг
+
+        t += dt;
+        screen.update(t, dt);
+
+        std::this_thread::sleep_for(std::chrono::duration<float>(1.0f / targetFps));
     }
-
-
 }

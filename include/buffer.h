@@ -7,6 +7,7 @@
 #include <vector>
 #include "3dObjects.h"
 #include "cmath"
+#include "3dPhysics.h"
 
 const int w = 200,h = 60;
 
@@ -14,8 +15,19 @@ class Scene {
     public:
 
     std::vector<Object> objects_ = {Object()};
+    Scene() {
+        objects_[0].rigidbody = true;
+    }
     void update(float t, float dt) {
-        objects_[0].rotY = t*10;
+       // objects_[0].rotY = t*10;
+        if (objects_[0].rigidbody) {
+            objects_[0].rb.update(dt);
+            auto x = objects_[0].rb.v_x * dt;
+            auto y = objects_[0].rb.v_y * dt;
+            auto z = objects_[0].rb.v_z * dt;
+            Vector3D move = {x,y,z};
+            objects_[0].position += move;
+        }
 
 
 
@@ -100,9 +112,16 @@ inline void drawPov(const Scene& scene, Buffer& buffer) {
 
             auto d = x.mesh->color[i];
             //NOW PROJECT TO CAMERA; camera is basically a rectangle which center is located on (0,0,0) as first version
-            auto camA = Vector3D(buffer.width/2.0 + a.x, buffer.height/2.0 - a.y, a.z);
-            auto camB = Vector3D(buffer.width/2.0 + b.x, buffer.height/2.0 - b.y, b.z);
-            auto camC = Vector3D(buffer.width/2.0 + c.x, buffer.height/2.0 - c.y, c.z);
+            float f = 40.0f;  // focus distance
+            auto camA = Vector3D(buffer.width/2.0 + 2.0f * f * a.x / a.z,
+                                 buffer.height/2.0 - f * a.y / a.z,
+                                 a.z);
+            auto camB = Vector3D(buffer.width/2.0 + 2.0f * f * b.x / b.z,
+                                 buffer.height/2.0 - f * b.y / b.z,
+                                 b.z);
+            auto camC = Vector3D(buffer.width/2.0 + 2.0f * f * c.x / c.z,
+                                 buffer.height/2.0 - f * c.y / c.z,
+                                 c.z);
             Rasterize(camA, camB, camC, buffer,d);
 
 

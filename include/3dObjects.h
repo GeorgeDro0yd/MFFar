@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "math.h"
+#include "3dPhysics.h"
 
 struct Mesh {
     std::vector<Vector3D> vertices;
@@ -21,7 +22,7 @@ struct Mesh {
 
 
 
-const float len = 20.0f;      // длина ребра
+const float len = 1.5;      // длина ребра
 const float H = len / 2;      // половина, координаты вершин
 
 const Mesh Cube(
@@ -62,13 +63,14 @@ const Mesh Cube(
 
 struct Object {
     const Mesh*    mesh;
-
     Vector3D position;
     float    rotX, rotY, rotZ;
-    explicit Object(const Mesh* mesh = &Cube, Vector3D position = {0,0,len + 10}, float rotX = pi/4.0, float rotY = pi/4, float rotZ = -(pi/4.0)) :
+    explicit Object(const Mesh* mesh = &Cube, Vector3D position = {0, 0,len + 10}, float rotX = pi/4.0, float rotY = pi/4, float rotZ = -(pi/4.0)) :
     mesh(mesh), position(position), rotX(rotX), rotY(rotY), rotZ(rotZ)  {
 
     }
+    bool rigidbody = false;
+    Rigidbody rb;
 };
 
 

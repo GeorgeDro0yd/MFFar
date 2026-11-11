@@ -9,4 +9,6 @@ add_executable(hwads main.cpp
         include/buffer.h
         include/3dObjects.h
         include/render.h
+        include/import_obj.h
+        include/3dPhysics.h
 )
