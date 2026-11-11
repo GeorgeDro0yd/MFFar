@@ -6,6 +6,9 @@
 #define HWADS_MATH_H
 #include <iostream>
 
+const float pi = 3.14;
+
+
 struct Vector3D {
     float x,y,z;
 

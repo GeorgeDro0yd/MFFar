@@ -10,8 +10,9 @@ struct Screen {
     Buffer buffer;
     Scene scene;
     void update(float t, float dt) {
-        scene.update(t, dt);
+
         buffer.clear();
+        scene.update(t, dt);
         drawPov(scene, buffer);
         std::string frame = "\x1b[H";
         for (int i = 0; i < buffer.height; i++) {

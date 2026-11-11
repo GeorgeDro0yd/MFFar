@@ -64,16 +64,16 @@ struct Object {
     const Mesh*    mesh;
 
     Vector3D position;
-    float    angle;
-    explicit Object(const Mesh* mesh = &Cube, Vector3D position = {0,0,len + 10}, float angle = 0) :
-    mesh(mesh), position(position), angle(angle)  {
+    float    rotX, rotY, rotZ;
+    explicit Object(const Mesh* mesh = &Cube, Vector3D position = {0,0,len + 10}, float rotX = pi/4.0, float rotY = pi/4, float rotZ = -(pi/4.0)) :
+    mesh(mesh), position(position), rotX(rotX), rotY(rotY), rotZ(rotZ)  {
 
     }
 };
 
 
-Matrix4D MakeTransform(const Object& o) {
-    Matrix3D r = MakeRotationY(o.angle);
+inline Matrix4D MakeTransform(const Object& o) {
+    Matrix3D r = MakeRotationY(o.rotY) * MakeRotationZ(o.rotZ) * MakeRotationX(o.rotX);
     const Vector3D& p = o.position;
 
     return Matrix4D(r(0,0), r(0,1), r(0,2), p.x,

@@ -8,13 +8,14 @@
 #include "3dObjects.h"
 #include "cmath"
 
-const int w = 110,h = 30;
+const int w = 200,h = 60;
 
 class Scene {
     public:
 
     std::vector<Object> objects_ = {Object()};
     void update(float t, float dt) {
+        objects_[0].rotY = t*10;
 
 
 
@@ -93,15 +94,16 @@ inline void drawPov(const Scene& scene, Buffer& buffer) {
     for (auto& x : scene.objects_) {
         for (int i = 0; i<x.mesh->indices.size()/3; i++) {
             auto Global = MakeTransform(x);
-            auto a = Global * toVector4D(x.mesh->vertices[3 * i]);
-            auto b = Global * toVector4D(x.mesh->vertices[3 * i + 1]);
-            auto c = Global * toVector4D(x.mesh->vertices[3 * i + 2]);
+            auto a = Global * toVector4D(x.mesh->vertices[x.mesh->indices[3 * i]]);
+            auto b = Global * toVector4D(x.mesh->vertices[x.mesh->indices[3 * i + 1]]);
+            auto c = Global * toVector4D(x.mesh->vertices[x.mesh->indices[3 * i + 2]]);
+
             auto d = x.mesh->color[i];
             //NOW PROJECT TO CAMERA; camera is basically a rectangle which center is located on (0,0,0) as first version
             auto camA = Vector3D(buffer.width/2.0 + a.x, buffer.height/2.0 - a.y, a.z);
             auto camB = Vector3D(buffer.width/2.0 + b.x, buffer.height/2.0 - b.y, b.z);
             auto camC = Vector3D(buffer.width/2.0 + c.x, buffer.height/2.0 - c.y, c.z);
-            Rasterize(camA, camB, camC, buffer, x.mesh->color[i]);
+            Rasterize(camA, camB, camC, buffer,d);
 
 
         }

@@ -4,14 +4,22 @@
 #include "math.h"
 #include "include/math.h"
 #include "include/render.h"
+#include <chrono>
+#include <thread>
 
+auto fps = 120.0;
 
 int main() {
-    Vector3D a(0,0,5);
-    Vector3D b(0, 15, 5);
-    Vector3D c(30, 0, 5);
+    bool running = true;
+
     Screen screen;
-    Rasterize(a,b,c,screen.buffer);
-    screen.update(1,2);
+    auto t = 0.0;
+
+    while (running) {
+        screen.update(t,2);
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000/60));
+        t+= 1/fps;
+    }
+
 
 }
