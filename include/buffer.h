@@ -98,6 +98,10 @@ inline void drawPov(const Scene& scene, Buffer& buffer) {
             auto c = Global * toVector4D(x.mesh->vertices[3 * i + 2]);
             auto d = x.mesh->color[i];
             //NOW PROJECT TO CAMERA; camera is basically a rectangle which center is located on (0,0,0) as first version
+            auto camA = Vector3D(buffer.width/2.0 + a.x, buffer.height/2.0 - a.y, a.z);
+            auto camB = Vector3D(buffer.width/2.0 + b.x, buffer.height/2.0 - b.y, b.z);
+            auto camC = Vector3D(buffer.width/2.0 + c.x, buffer.height/2.0 - c.y, c.z);
+            Rasterize(camA, camB, camC, buffer, x.mesh->color[i]);
 
 
         }
